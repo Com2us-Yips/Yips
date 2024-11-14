@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "YipsCharacter.h"
@@ -6,14 +5,12 @@
 #include "Containers/Array.h"
 #include "Math/UnrealMathUtility.h"
 
-// Sets default values
 AYipsCharacter::AYipsCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
     ChapterInt = 1;
-	MaxActionsPerDayInt = 3; // Ã¹ Ã©ÅÍ¿¡¼­ ÇÏ·ç Çàµ¿·®
+	MaxActionsPerDayInt = 3; // ì²« ì±•í„°ì—ì„œ í•˜ë£¨ í–‰ë™ëŸ‰
 	CurrentActionsInt = 0;
 	StrikesInt = 0;
 	BallsInt = 0;
@@ -24,17 +21,17 @@ AYipsCharacter::AYipsCharacter()
 
 void AYipsCharacter::InitializeNewChapter()
 {
-    // Çàµ¿ ¼ø¼­¸¦ Ã©ÅÍ¸¶´Ù ¹«ÀÛÀ§·Î ¼ÅÇÃÇÏ¿© ¼³Á¤ (AºÎÅÍ F±îÁö »ç¿ë)
+    // í–‰ë™ ìˆœì„œë¥¼ ì±•í„°ë§ˆë‹¤ ë¬´ì‘ìœ„ë¡œ ì…”í”Œí•˜ì—¬ ì„¤ì • (Aë¶€í„° Fê¹Œì§€ ì‚¬ìš©)
     TArray<FString> PossibleActions = { "A", "B", "C", "D", "E", "F" };
     CorrectOrderString = PossibleActions;
-    ShuffleArray(CorrectOrderString); // ¼ø¼­¸¦ ¹«ÀÛÀ§·Î ¼¯À½
-    CorrectOrderString.SetNum(MaxActionsPerDayInt); // ÇÊ¿äÇÑ Çàµ¿·®¸¸Å­ Àß¶ó³¿
+    ShuffleArray(CorrectOrderString);  // ìˆœì„œë¥¼ ë¬´ì‘ìœ„ë¡œ ì„ìŒ
+    CorrectOrderString.SetNum(MaxActionsPerDayInt); // í•„ìš”í•œ í–‰ë™ëŸ‰ë§Œí¼ ì˜ë¼ëƒ„
 
     CurrentOrderIndexInt = 0;
     StrikesInt = 0;
     BallsInt = 0;
 
-    UE_LOG(LogTemp, Log, TEXT("»õ·Î¿î Ã©ÅÍ %d ½ÃÀÛ. »õ·Î¿î Çàµ¿ ¼ø¼­ ¼³Á¤: %s"), ChapterInt, *FString::Join(CorrectOrderString, TEXT(", ")));
+    UE_LOG(LogTemp, Log, TEXT("ìƒˆë¡œìš´ ì±•í„° %d ì‹œì‘. ìƒˆë¡œìš´ í–‰ë™ ìˆœì„œ ì„¤ì •: %s"), ChapterInt, *FString::Join(CorrectOrderString, TEXT(", ")));
 }
 
 void AYipsCharacter::ShuffleArray(TArray<FString> ArrayToShuffle)
@@ -55,7 +52,7 @@ void AYipsCharacter::PerformAction(FString  ActionID)
         CurrentActionsInt++;
         CheckAction(ActionID);
 
-        // ÇÏ·çÀÇ ¸ğµç Çàµ¿À» ¿Ï·áÇßÀ» °æ¿ì
+        // í•˜ë£¨ì˜ ëª¨ë“  í–‰ë™ì„ ì™„ë£Œí–ˆì„ ê²½ìš°
         if (CurrentActionsInt >= MaxActionsPerDayInt)
         {
             EndDay();
@@ -63,20 +60,20 @@ void AYipsCharacter::PerformAction(FString  ActionID)
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("¿À´Ã ÇÒ ¼ö ÀÖ´Â ¸ğµç Çàµ¿À» ¿Ï·áÇß½À´Ï´Ù."));
+        UE_LOG(LogTemp, Warning, TEXT("ì˜¤ëŠ˜ í•  ìˆ˜ ìˆëŠ” ëª¨ë“  í–‰ë™ì„ ì™„ë£Œí–ˆìŠµë‹ˆë‹¤."));
     }
 }
 
 void AYipsCharacter::CheckAction(FString  ActionID)
 {
-    // ¼ø¼­°¡ ¸Â´Â °æ¿ì
+    // ìˆœì„œê°€ ë§ëŠ” ê²½ìš°
     if (CorrectOrderString.IsValidIndex(CurrentOrderIndexInt) && ActionID == CorrectOrderString[CurrentOrderIndexInt])
     {
         StrikesInt++;
         CurrentOrderIndexInt++;
-        UE_LOG(LogTemp, Log, TEXT("½ºÆ®¶óÀÌÅ©! ÇöÀç ½ºÆ®¶óÀÌÅ©: %d"), StrikesInt);
+        UE_LOG(LogTemp, Log, TEXT("ìŠ¤íŠ¸ë¼ì´í¬! í˜„ì¬ ìŠ¤íŠ¸ë¼ì´í¬: %d"), StrikesInt);
 
-        // ½ºÆ®¶óÀÌÅ©°¡ Çàµ¿·®¸¸Å­ µÇ¸é ´ÙÀ½ Ã©ÅÍ·Î ÀÌµ¿
+        // ìŠ¤íŠ¸ë¼ì´í¬ê°€ í–‰ë™ëŸ‰ë§Œí¼ ë˜ë©´ ë‹¤ìŒ ì±•í„°ë¡œ ì´ë™
         if (StrikesInt >= MaxActionsPerDayInt)
         {
             NextChapter();
@@ -85,16 +82,16 @@ void AYipsCharacter::CheckAction(FString  ActionID)
     else
     {
         BallsInt++;
-        UE_LOG(LogTemp, Log, TEXT("º¼! ÇöÀç º¼: %d"), BallsInt);
+        UE_LOG(LogTemp, Log, TEXT("ë³¼! í˜„ì¬ ë³¼: %d"), BallsInt);
     }
 }
 
 void AYipsCharacter::EndDay()
 {
-    // ÇÏ·ç°¡ ³¡³ª°í °á°ú È­¸éÀ» ¶ç¿ì°Å³ª Ä³¸¯ÅÍ°¡ Àá¿¡ µå´Â Ã³¸®¸¦ ¼öÇà
-    UE_LOG(LogTemp, Log, TEXT("ÇÏ·ç°¡ ³¡³µ½À´Ï´Ù. °á°ú È­¸éÀ» Ç¥½ÃÇÕ´Ï´Ù."));
+    // í•˜ë£¨ê°€ ëë‚˜ê³  ê²°ê³¼ í™”ë©´ì„ ë„ìš°ê±°ë‚˜ ìºë¦­í„°ê°€ ì ì— ë“œëŠ” ì²˜ë¦¬ë¥¼ ìˆ˜í–‰
+    UE_LOG(LogTemp, Log, TEXT("í•˜ë£¨ê°€ ëë‚¬ìŠµë‹ˆë‹¤. ê²°ê³¼ í™”ë©´ì„ í‘œì‹œí•©ë‹ˆë‹¤."));
 
-    // ÇÏ·ç Çàµ¿·® ÃÊ±âÈ­
+     // í•˜ë£¨ í–‰ë™ëŸ‰ ì´ˆê¸°í™”
     CurrentActionsInt = 0;
     StrikesInt = 0;
     BallsInt = 0;
@@ -103,30 +100,27 @@ void AYipsCharacter::EndDay()
 
 void AYipsCharacter::NextChapter()
 {
-    // ´ÙÀ½ Ã©ÅÍ·Î ÀÌµ¿
+       // ë‹¤ìŒ ì±•í„°ë¡œ ì´ë™
     ChapterInt++;
-    MaxActionsPerDayInt += 2; // Ã©ÅÍ¸¶´Ù Çàµ¿·® Áõ°¡
-    UE_LOG(LogTemp, Log, TEXT("Ã©ÅÍ %d·Î ÀÌµ¿ÇÕ´Ï´Ù! »õ·Î¿î Çàµ¿·®: %d"), ChapterInt, MaxActionsPerDayInt);
+    MaxActionsPerDayInt += 2; // ì±•í„°ë§ˆë‹¤ í–‰ë™ëŸ‰ ì¦ê°€
+    UE_LOG(LogTemp, Log, TEXT("ì±•í„° %dë¡œ ì´ë™í•©ë‹ˆë‹¤! ìƒˆë¡œìš´ í–‰ë™ëŸ‰: %d"), ChapterInt, MaxActionsPerDayInt);
 
     EndDay();
-    InitializeNewChapter(); // Ã©ÅÍ ÀüÈ¯ ÈÄ ÇÏ·ç Çàµ¿ ÃÊ±âÈ­
+    InitializeNewChapter(); // ì±•í„° ì „í™˜ í›„ í•˜ë£¨ í–‰ë™ ì´ˆê¸°í™”
 }
 
-// Called when the game starts or when spawned
 void AYipsCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void AYipsCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
 void AYipsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
