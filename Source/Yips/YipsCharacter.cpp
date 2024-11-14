@@ -10,6 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "YipsPlayerController.h"
+#include "YipsCharacterStateComponent.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 // AYipsCharacter
@@ -27,20 +30,29 @@ AYipsCharacter::AYipsCharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
-
+	
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
 	// instead of recompiling to adjust them
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+	GetCharacterMovement()->MaxWalkSpeed = 200.f;
+	GetCharacterMovement()->MinAnalogWalkSpeed = 8.f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 1000.f;
+
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	
+	// 나중에 추가할 것들
+	//CameraBoom->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+	//CameraBoom->TargetOffset = FVector(0.f, 0.f, 500.f);
+	
+	//CameraBoom->bInheritPitch = false;
+	//CameraBoom->bInheritYaw = false;
+	//CameraBoom->bInheritRoll = false;
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -49,6 +61,10 @@ AYipsCharacter::AYipsCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+
+	// State Section
+	StateMachine = CreateDefaultSubobject<UYipsCharacterStateComponent>(TEXT("State Machine"));
 }
 
 void AYipsCharacter::BeginPlay()
@@ -56,8 +72,10 @@ void AYipsCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+
+	// AYipsPlayerController
 	//Add Input Mapping Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	if (AYipsPlayerController* PlayerController = CastChecked<AYipsPlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -81,8 +99,12 @@ void AYipsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 		//Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AYipsCharacter::Move);
 
-		//Looking
+		//Looking (Delete)
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AYipsCharacter::Look);
+
+
+		//Interacting
+		//EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Triggered, this, &AYipsCharacter::Interact);
 
 	}
 
@@ -122,6 +144,12 @@ void AYipsCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+
+void AYipsCharacter::Interact(const FInputActionValue& Value)
+{
+	// 트리거 인풋 추가 예정
 }
 
 
