@@ -11,34 +11,69 @@ class YIPSPROJECT_API AYipsCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
+	
+	/** MappingContext */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputMappingContext* DefaultMappingContext;
+
+	/** Jump Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* JumpAction;
+
+	/** Move Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* MoveAction;
+
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* LookAction;
+
 public:
 	// Sets default values for this character's properties
 	AYipsCharacter();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+protected:
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	/** Called for movement input */
+	void Move(const FInputActionValue& Value);
+
+	/** Called for looking input */
+	void Look(const FInputActionValue& Value);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	// To add mapping context
+	virtual void BeginPlay();
 
-    void ShowResultScreen();  // °á°úÃ¢ ¶ç¿ì±â
+    void ShowResultScreen();  // ê²°ê³¼ì°½ ë„ìš°ê¸°
 
-    void NextChapter();  // ´ÙÀ½ Ã©ÅÍ·Î ÀüÈ¯
+    void NextChapter();  // ë‹¤ìŒ ì±•í„°ë¡œ ì „í™˜
 
-    void CheckAction(FString ActionID); // Çàµ¿ ¼ø¼­¸¦ È®ÀÎ
+    void CheckAction(FString ActionID); // í–‰ë™ ìˆœì„œë¥¼ í™•ì¸
 
     UFUNCTION(BlueprintCallable, Category = "Interaction")
-    void PerformAction(FString ActionID); // Çàµ¿À» ¼öÇàÇÏ´Â ÇÔ¼ö
+    void PerformAction(FString ActionID); // í–‰ë™ì„ ìˆ˜í–‰í•˜ëŠ” í•¨ìˆ˜
 
-    void EndDay();  // ÇÏ·ç Á¾·á
+    void EndDay();  // í•˜ë£¨ ì¢…ë£Œ
 
-    void InitializeNewChapter(); // »õ·Î¿î Ã©ÅÍ ½ÃÀÛ ½Ã ¼ø¼­ ÃÊ±âÈ­
+    void InitializeNewChapter(); // ìƒˆë¡œìš´ ì±•í„° ì‹œì‘ ì‹œ ìˆœì„œ ì´ˆê¸°í™”
 
-    void ShuffleArray(TArray<FString> ArrayToShuffle); //¼ø¼­ ¼ÅÇÃ
+    void ShuffleArray(TArray<FString> ArrayToShuffle); //ìˆœì„œ ì…”í”Œ
+
+public:
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/** Returns FollowCamera subobject **/
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 private:
     // Variables to manage interaction tracking
@@ -54,5 +89,7 @@ private:
 
     // Class reference for the result screen widget
     TSubclassOf<class UUserWidget> ResultScreenClass;
+
+
 
 };
