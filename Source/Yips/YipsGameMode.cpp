@@ -2,6 +2,7 @@
 
 #include "YipsGameMode.h"
 #include "YipsCharacter.h"
+#include "YipsPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 AYipsGameMode::AYipsGameMode()
@@ -12,4 +13,6 @@ AYipsGameMode::AYipsGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	PlayerControllerClass = AYipsPlayerController::StaticClass();
 }

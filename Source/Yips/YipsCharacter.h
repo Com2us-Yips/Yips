@@ -37,6 +37,10 @@ class AYipsCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	/** Interaction Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InteractionAction;
+
 public:
 	AYipsCharacter();
 	
@@ -49,6 +53,8 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 			
+	/** Called for Interacting input */
+	void Interact(const FInputActionValue& Value);
 
 protected:
 	// APawn interface
@@ -57,10 +63,18 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+// State Section
+	class UYipsCharacterStateComponent* StateMachine;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	// 런타임 카메라 이동
+	FORCEINLINE void SetFollowCamera(UCameraComponent* NewCamera) { FollowCamera = NewCamera;}
+
+
 };
 
