@@ -12,6 +12,7 @@
 
 #include "YipsPlayerController.h"
 #include "YipsCharacterStateComponent.h"
+#include "YipsCharacterStateBaseComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -65,6 +66,7 @@ AYipsCharacter::AYipsCharacter()
 
 	// State Section
 	StateMachine = CreateDefaultSubobject<UYipsCharacterStateComponent>(TEXT("State Machine"));
+	
 }
 
 void AYipsCharacter::BeginPlay()
@@ -82,6 +84,11 @@ void AYipsCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+}
+
+EMyCharacterState AYipsCharacter::GetStateEnum()
+{
+	return StateMachine->GetCurrentStateEnum();
 }
 
 //////////////////////////////////////////////////////////////////////////

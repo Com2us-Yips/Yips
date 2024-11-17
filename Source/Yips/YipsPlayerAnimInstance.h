@@ -6,6 +6,10 @@
 #include "Animation/AnimInstance.h"
 #include "YipsPlayerAnimInstance.generated.h"
 
+
+// Forward Declare
+enum class EMyCharacterState : uint8;
+
 /**
  * 
  */
@@ -24,10 +28,8 @@ protected:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-#pragma endregion
-
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "Character")
-	TObjectPtr<class ACharacter> Onwer;
+	TObjectPtr<class AYipsCharacter> Onwer;
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "Character")
 	TObjectPtr<class UCharacterMovementComponent> Movement;
@@ -36,12 +38,10 @@ protected:
 	FVector Velocity;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Character")
-	uint8 bIsIdle : 1;
+	EMyCharacterState CurrentStateEnum;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Character")
 	float Speed;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Character")
-	float MovingThreshold;
-
+#pragma endregion
 };

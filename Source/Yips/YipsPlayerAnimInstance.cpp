@@ -2,19 +2,22 @@
 
 
 #include "YipsPlayerAnimInstance.h"
-#include "GameFramework/Character.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
+
+#include "YipsCharacter.h"
+#include "YipsCharacterStateBaseComponent.h"
 
 UYipsPlayerAnimInstance::UYipsPlayerAnimInstance()
 {
-	MovingThreshold = 3.0f;
+	
 }
 
 void UYipsPlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 
-	Onwer = Cast<ACharacter>(GetOwningActor());
+	Onwer = Cast<AYipsCharacter>(GetOwningActor());
 
 	if (Onwer)
 	{
@@ -26,10 +29,15 @@ void UYipsPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
+	if (Onwer)
+	{
+		CurrentStateEnum = Onwer->GetStateEnum();
+	}
+
 	if (Movement)
 	{
 		Velocity = Movement->Velocity;
 		Speed = Velocity.Size2D();
-		bIsIdle = Speed < MovingThreshold;
 	}
 }
+

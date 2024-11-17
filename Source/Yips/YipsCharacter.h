@@ -7,6 +7,13 @@
 #include "InputActionValue.h"
 #include "YipsCharacter.generated.h"
 
+#pragma region Forward Declare
+
+class UYipsCharacterStateComponent;
+class UYipsCharacterStateBaseComponent;
+enum class EMyCharacterState : uint8;
+
+#pragma endregion
 
 UCLASS(config=Game)
 class AYipsCharacter : public ACharacter
@@ -64,7 +71,12 @@ protected:
 	virtual void BeginPlay();
 
 // State Section
-	class UYipsCharacterStateComponent* StateMachine;
+protected:
+	UYipsCharacterStateComponent* StateMachine;
+
+public:
+	EMyCharacterState GetStateEnum();
+
 
 public:
 	/** Returns CameraBoom subobject **/
